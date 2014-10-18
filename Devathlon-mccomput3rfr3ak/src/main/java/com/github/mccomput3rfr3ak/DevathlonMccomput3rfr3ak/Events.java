@@ -8,20 +8,21 @@ import java.util.Map;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class Events implements Listener{
@@ -32,7 +33,24 @@ public class Events implements Listener{
 	public static int actualPlayers = 0;
 	public String prefix = DevathlonMccomput3rfr3ak.prefix;
 	public Map<Player, Boolean> memberOfGame = new HashMap<>();
-	public Map<Player, Boolean> doubleJump = new HashMap<>();
+	public static Map<Player, Boolean> doubleJump = new HashMap<>();
+	public static Map<Player, Integer> dJreamingtime = new HashMap<>();
+
+	/*!
+	 * This method handles the doubleJump effect
+	 */
+	@EventHandler
+	public void onToggleFlight(PlayerToggleFlightEvent event) {
+		
+	}
+	
+	@EventHandler
+	public void onPlayerMove(PlayerMoveEvent event){
+		Player p = event.getPlayer();
+		if ((p.getGameMode() != GameMode.CREATIVE) && (p.getLocation().subtract(0, 1, 0).getBlock().getType() != Material.AIR) && (!p.isFlying()) ) {
+			p.setAllowFlight(true);
+		}
+	}
 	
 	/*!
 	 * Allows player to use doublejump - potion
@@ -43,7 +61,9 @@ public class Events implements Listener{
 			event.setCancelled(true);
 			Player p = event.getPlayer();
 			p.getInventory().remove(event.getItem());
-//			p.addPotionEffect(new PotionEffect(PotionEffectType.), arg1)
+			p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 120, 1), false);
+			doubleJump.put(p, true);
+			dJreamingtime.put(p, 120);
 		}
 	}
 	
@@ -83,6 +103,7 @@ public class Events implements Listener{
 		if(p.getGameMode() != GameMode.CREATIVE) event.setCancelled(true);
 	}
 	
+	
 	/*!
 	 * Prevents players from dropping items
 	 */
@@ -92,6 +113,7 @@ public class Events implements Listener{
 		if(p.getGameMode() != GameMode.CREATIVE) event.setCancelled(true);
 	}
 
+	
 	/*!
 	 * Prevents players from breaking blocks
 	 */
@@ -101,6 +123,7 @@ public class Events implements Listener{
 		if(p.getGameMode() != GameMode.CREATIVE) event.setCancelled(true);
 	}
 
+	
 	/*!
 	 * Handles PlayerQuitEvent
 	 */
@@ -114,6 +137,7 @@ public class Events implements Listener{
 			actualPlayers--;
 		}
 	}
+	
 	
 	/*!
 	 * Method for giving player the doubleJumpPotion

@@ -8,12 +8,13 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import com.comphenix.protocol.*;
+//import com.comphenix.protocol.*;
 
 public class DevathlonMccomput3rfr3ak extends JavaPlugin{
 
 	public static String prefix = ChatColor.GREEN + "[DevAhtlon-2014] " + ChatColor.RESET;
 	int countdown;
+	int timer;
 	public boolean activeGame = false;
 //	private ProtocolManager protocolManager;
 //	
@@ -47,7 +48,6 @@ public class DevathlonMccomput3rfr3ak extends JavaPlugin{
 						if (Events.actualPlayers < 1) {
 							activeGame = false;
 							Events.preparing = true;
-							timer();
 						}
 						if (countdown == 0) {
 							getServer().broadcastMessage(prefix + ChatColor.GOLD + "M\u00F6gen die Spiele beginnen!");
@@ -72,22 +72,38 @@ public class DevathlonMccomput3rfr3ak extends JavaPlugin{
 		}.runTaskTimerAsynchronously(this, 0L, 20L );
 	}
 	
+	/*!
+	 * Handles 'waiting for players' and doubleJump potion effect!
+	 */
 	public void timer() {
+		
+		timer = 0;
 		new BukkitRunnable() {
 			
 			@Override
 			public void run() {
-				if (Events.preparing) {
+				timer++;
+				if (Events.preparing && timer == 11) {
 					if (Events.actualPlayers < Events.minPlayers) 
 						getServer().broadcastMessage(prefix + ChatColor.BLUE + "Waiting for Players");
 					else {
 						Events.preparing = false;
 						startGame();
 					}
-				} else this.cancel();
+					timer = 0;
+				}
 				
+				for (Player p : getServer().getOnlinePlayers()) {
+					if (Events.doubleJump.get(p)) {
+						if (Events.dJreamingtime.get(p) > 0) {
+							Events.dJreamingtime.put(p, (Events.dJreamingtime.get(p) - 1));
+						} else {
+							Events.doubleJump.put(p, false);
+						}
+					}
+				}
 			}
-		}.runTaskTimerAsynchronously(this, 0L, 200L);
+		}.runTaskTimerAsynchronously(this, 0L, 20L);
 	}
 	
 	
