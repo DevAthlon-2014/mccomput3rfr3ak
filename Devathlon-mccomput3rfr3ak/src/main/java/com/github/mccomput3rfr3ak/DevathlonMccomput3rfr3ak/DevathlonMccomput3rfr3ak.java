@@ -1,8 +1,14 @@
 package com.github.mccomput3rfr3ak.DevathlonMccomput3rfr3ak;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -22,7 +28,7 @@ public class DevathlonMccomput3rfr3ak extends JavaPlugin{
 	
 	@Override
 	public void onDisable() {
-	
+		getServer().getScheduler().cancelAllTasks();
 	}
 
 	@Override
@@ -92,6 +98,21 @@ public class DevathlonMccomput3rfr3ak extends JavaPlugin{
 				
 			}
 		}.runTaskTimerAsynchronously(this, 0L, 200L);
+	}
+	/*!
+	 * Method for giving player the doubleJumpPotion
+	 * @param player Player to give the Potion
+	 */
+	public void giveDoubleJumpPotion(Player player) {
+		ItemStack potion = new ItemStack(Material.POTION, 1, (short) 8227);
+		ItemMeta potionM = potion.getItemMeta();
+		potionM.setDisplayName(ChatColor.GREEN + "Doppelsprung");
+		
+		List<String> lore = new ArrayList<String>();
+		lore.add(ChatColor.GOLD + "Drinke diesen Trank und");
+		lore.add(ChatColor.GOLD + "erhalte die Doppelsprungfähigkeit für");
+		lore.add(ChatColor.RED + "2 Minuten");
+		potionM.setLore(lore);
 	}
 
 }
