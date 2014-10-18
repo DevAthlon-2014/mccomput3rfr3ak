@@ -7,6 +7,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class DevathlonMccomput3rfr3ak extends JavaPlugin{
 
 	public static String prefix = ChatColor.RED + "[DevAhtlon-2014] " + ChatColor.RESET;
+	private ProtocolManager protocolManager;
+	  
+	public void onLoad() {
+	    protocolManager = ProtocolLibrary.getProtocolManager();
+	}
+	
 	
 	@Override
 	public void onDisable() {
