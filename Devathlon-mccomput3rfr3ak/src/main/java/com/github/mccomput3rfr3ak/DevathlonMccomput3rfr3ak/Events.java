@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -45,11 +46,20 @@ public class Events implements Listener{
 	}
 	
 	/*!
-	 * Prevent players who aren't in gamemode 1 from InventoryInteract
+	 * Prevents players who aren't in gamemode 1 from InventoryInteract
 	 */
 	@EventHandler
 	public void onPlayerInventory(InventoryClickEvent event) {
 		Player p = (Player) event.getWhoClicked();
+		if(p.getGameMode() != GameMode.CREATIVE) event.setCancelled(true);
+	}
+	
+	/*!
+	 * Prevents players from dropping items
+	 */
+	@EventHandler
+	public void onItemDrop(PlayerDropItemEvent event) {
+		Player p = event.getPlayer();
 		if(p.getGameMode() != GameMode.CREATIVE) event.setCancelled(true);
 	}
 }
