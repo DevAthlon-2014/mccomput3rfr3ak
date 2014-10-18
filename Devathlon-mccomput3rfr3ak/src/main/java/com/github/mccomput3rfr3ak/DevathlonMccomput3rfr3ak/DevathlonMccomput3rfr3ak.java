@@ -59,13 +59,13 @@ public class DevathlonMccomput3rfr3ak extends JavaPlugin{
 						if (countdown == 60 || countdown == 30 || countdown == 15 || countdown == 5){
 							getServer().broadcastMessage(prefix + "Start in " + countdown + "!");
 							for (Player p : getServer().getOnlinePlayers()) {
-								
-//								try {
-//								    protocolManager.sendServerPacket(p,new PacketContainer(P));
-//								} catch (Exception e) {
-//								    throw new RuntimeException(
-//								        "Cannot send packet ", e);
-//								}
+								p.setExp(1.2F);
+								try {
+								    protocolManager.getMinecraftVersion();
+								} catch (Exception e) {
+								    throw new RuntimeException(
+								        "Cannot send packet ", e);
+								}
 							}
 						}
 						countdown--;

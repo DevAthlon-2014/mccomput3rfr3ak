@@ -41,6 +41,7 @@ public class Events implements Listener{
 				p.setGameMode(GameMode.SURVIVAL);
 				p.teleport(p.getWorld().getSpawnLocation());
 				p.getWorld().strikeLightningEffect(p.getLocation());
+				p.setExp(0);
 				
 			} else {
 				p.kickPlayer(ChatColor.RED + "Leider ist der Server schon voll!\nVersuche es später doch noch einmal!");
