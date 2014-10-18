@@ -11,6 +11,7 @@ public class Events implements Listener{
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		event.setJoinMessage(prefix + "Welcome, " + event.getPlayer().getName());
+		event.getPlayer().getWorld().strikeLightning(event.getPlayer().getLocation());
 		
 	}
 }

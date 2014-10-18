@@ -15,7 +15,7 @@ public class DevathlonMccomput3rfr3ak extends JavaPlugin{
 
 	@Override
 	public void onEnable() {
-		
+		getServer().getPluginManager().registerEvents(new Events(), this);
 		
 		PluginDescriptionFile pdfFile = this.getDescription();
         getLogger().info(pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!");
