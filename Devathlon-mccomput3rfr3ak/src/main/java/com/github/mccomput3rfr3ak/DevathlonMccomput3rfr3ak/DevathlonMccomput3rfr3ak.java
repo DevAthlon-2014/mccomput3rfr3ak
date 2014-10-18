@@ -1,5 +1,7 @@
 package com.github.mccomput3rfr3ak.DevathlonMccomput3rfr3ak;
 
+import java.lang.reflect.InvocationTargetException;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -7,8 +9,8 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.ProtocolManager;
+import com.comphenix.protocol.*;
+import com.comphenix.protocol.events.PacketContainer;
 
 public class DevathlonMccomput3rfr3ak extends JavaPlugin{
 
@@ -53,7 +55,18 @@ public class DevathlonMccomput3rfr3ak extends JavaPlugin{
 						if (countdown == 60 || countdown == 30 || countdown == 15 || countdown == 5){
 							getServer().broadcastMessage(prefix + "Start in " + countdown + "!");
 							for (Player p : getServer().getOnlinePlayers()) {
-								((CraftPlayer) p).getHandler().playerConnection();
+								PacketContainer fakeExplosion = protocolManager.createPacket(PacketType.Play.Server.EXPLOSION);
+								fakeExplosion.getDoubles().
+							    write(0, p.getLocation().getX()).
+							    write(1, p.getLocation().getY()).
+							    write(2, p.getLocation().getZ());
+								fakeExplosion.getFloat().write(0, 3.0F);
+								try {
+								    protocolManager.sendServerPacket(p, fakeExplosion);
+								} catch (InvocationTargetException e) {
+								    throw new RuntimeException(
+								        "Cannot send packet " + fakeExplosion, e);
+								}
 							}
 						}
 					}
