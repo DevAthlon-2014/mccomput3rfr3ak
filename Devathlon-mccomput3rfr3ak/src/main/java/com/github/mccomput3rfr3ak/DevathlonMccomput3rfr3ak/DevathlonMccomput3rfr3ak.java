@@ -3,6 +3,7 @@ package com.github.mccomput3rfr3ak.DevathlonMccomput3rfr3ak;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 //import com.comphenix.protocol.ProtocolLibrary;
 //import com.comphenix.protocol.ProtocolManager;
@@ -11,7 +12,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class DevathlonMccomput3rfr3ak extends JavaPlugin{
 
-	public static String prefix = ChatColor.RED + "[DevAhtlon-2014] " + ChatColor.RESET;
+	public static String prefix = ChatColor.GREEN + "[DevAhtlon-2014] " + ChatColor.RESET;
 //	private ProtocolManager protocolManager;
 //	
 //	public void onLoad() {
@@ -31,6 +32,17 @@ public class DevathlonMccomput3rfr3ak extends JavaPlugin{
         getLogger().info(pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!");
 	}
 	
-	
+	public void timer() {
+		new BukkitRunnable() {
+			
+			@Override
+			public void run() {
+				if (Events.preparing) {
+					if (Events.actualPlayers < Events.minPlayers) getServer().broadcastMessage(prefix + ChatColor.BLUE + "Waiting for Players")
+				}
+				
+			}
+		};
+	}
 
 }

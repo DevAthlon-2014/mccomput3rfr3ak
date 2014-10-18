@@ -1,24 +1,22 @@
 package com.github.mccomput3rfr3ak.DevathlonMccomput3rfr3ak;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 public class Events implements Listener{
-
+	
+	public static boolean preparing = true;
+	public static int maxPlayers = 10;
+	public static int minPlayers = 2;
+	public static int actualPlayers = 0;
 	public String prefix = DevathlonMccomput3rfr3ak.prefix;
 	
 	/*!
@@ -28,23 +26,19 @@ public class Events implements Listener{
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		
 		Player p = event.getPlayer();
-		event.setJoinMessage(null);
+		event.setJoinMessage(ChatColor.GRAY + "--> " + p.getName());
 		
-		p.sendMessage(prefix + "Welcome, " + p.getName());
-		p.getWorld().strikeLightningEffect(p.getLocation());
-		
-		ItemStack startGame = new ItemStack(Material.BLAZE_ROD);
-		ItemMeta startGameM = startGame.getItemMeta();
-		startGameM.setDisplayName(ChatColor.GOLD + "Starte das Effekt-Spiel");
-		
-		List<String> lore = new ArrayList<String>();
-		lore.add(ChatColor.AQUA + "Klicke mit diesem Item");
-		lore.add(ChatColor.AQUA + "und lasse das Spiel beginnen");
-		
-		startGameM.setLore(lore);
-		startGame.setItemMeta(startGameM);
-		p.getInventory().clear();
-		p.getInventory().setItem(4, startGame);
+		if (preparing) {
+			if (actualPlayers < maxPlayers) {
+				actualPlayers++;
+
+				p.sendMessage(prefix + "Welcome, " + p.getName());
+				p.getWorld().strikeLightningEffect(p.getLocation());
+				
+			} else {
+				p.kickPlayer(ChatColor.RED + "Leider ist der Server schon voll!\nVersuche es später doch noch einmal!");
+			}
+		}
 		
 	}
 	
@@ -66,10 +60,21 @@ public class Events implements Listener{
 		if(p.getGameMode() != GameMode.CREATIVE) event.setCancelled(true);
 	}
 
+	/*!
+	 * Prevents players from breaking blocks
+	 */
 	@EventHandler
-	public void onItemKlick(PlayerInteractEvent event) {
-		if(event.getItem().getType() == Material.BLAZE_ROD && (event.getAction() == Action.RIGHT_CLICK_AIR)) {
-			
-		}
+	public void onBlockBreak(BlockBreakEvent event) {
+		Player p = event.getPlayer();
+		if(p.getGameMode() != GameMode.CREATIVE) event.setCancelled(true);
+	}
+
+	/*!
+	 * Handles PlayerQuitEvent
+	 */
+	@EventHandler
+	public void onPlayerQuit(PlayerQuitEvent event) {
+		event.setQuitMessage(ChatColor.GRAY + "<-- " + event.getPlayer().getName());
+		actualPlayers--;
 	}
 }
