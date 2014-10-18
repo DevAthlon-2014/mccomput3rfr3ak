@@ -9,8 +9,10 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -41,6 +43,7 @@ public class Events implements Listener{
 		
 		startGameM.setLore(lore);
 		startGame.setItemMeta(startGameM);
+		p.getInventory().clear();
 		p.getInventory().setItem(4, startGame);
 		
 	}
@@ -61,5 +64,12 @@ public class Events implements Listener{
 	public void onItemDrop(PlayerDropItemEvent event) {
 		Player p = event.getPlayer();
 		if(p.getGameMode() != GameMode.CREATIVE) event.setCancelled(true);
+	}
+
+	@EventHandler
+	public void onItemKlick(PlayerInteractEvent event) {
+		if(event.getItem().getType() == Material.BLAZE_ROD && (event.getAction() == Action.RIGHT_CLICK_AIR)) {
+			
+		}
 	}
 }
