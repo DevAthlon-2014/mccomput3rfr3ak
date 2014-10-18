@@ -30,6 +30,8 @@ public class DevathlonMccomput3rfr3ak extends JavaPlugin{
 
 	@Override
 	public void onEnable() {
+		timer();
+		
 		getServer().getPluginManager().registerEvents(new Events(), this);
 		
 		PluginDescriptionFile pdfFile = this.getDescription();
@@ -56,10 +58,7 @@ public class DevathlonMccomput3rfr3ak extends JavaPlugin{
 							getServer().broadcastMessage(prefix + "Start in " + countdown + "!");
 							for (Player p : getServer().getOnlinePlayers()) {
 								PacketContainer fakeExplosion = protocolManager.createPacket(PacketType.Play.Server.EXPLOSION);
-								fakeExplosion.getDoubles().
-							    write(0, p.getLocation().getX()).
-							    write(1, p.getLocation().getY()).
-							    write(2, p.getLocation().getZ());
+								fakeExplosion.getDoubles().write(0, p.getLocation().getX()).write(1, p.getLocation().getY()).write(2, p.getLocation().getZ());
 								fakeExplosion.getFloat().write(0, 3.0F);
 								try {
 								    protocolManager.sendServerPacket(p, fakeExplosion);
@@ -69,6 +68,7 @@ public class DevathlonMccomput3rfr3ak extends JavaPlugin{
 								}
 							}
 						}
+						countdown--;
 					}
 				}
 				
@@ -84,8 +84,10 @@ public class DevathlonMccomput3rfr3ak extends JavaPlugin{
 				if (Events.preparing) {
 					if (Events.actualPlayers < Events.minPlayers) 
 						getServer().broadcastMessage(prefix + ChatColor.BLUE + "Waiting for Players");
-					else
+					else {
 						Events.preparing = false;
+						startGame();
+					}
 				} else this.cancel();
 				
 			}

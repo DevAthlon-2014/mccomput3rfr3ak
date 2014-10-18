@@ -1,5 +1,8 @@
 package com.github.mccomput3rfr3ak.DevathlonMccomput3rfr3ak;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
@@ -18,6 +21,7 @@ public class Events implements Listener{
 	public static int minPlayers = 2;
 	public static int actualPlayers = 0;
 	public String prefix = DevathlonMccomput3rfr3ak.prefix;
+	public Map<Player, Boolean> memberOfGame = new HashMap<>();
 	
 	/*!
 	 * Prepares the effectgame for the player
@@ -31,8 +35,11 @@ public class Events implements Listener{
 		if (preparing) {
 			if (actualPlayers < maxPlayers) {
 				actualPlayers++;
-
+				memberOfGame.put(p, true);
 				p.sendMessage(prefix + "Welcome, " + p.getName());
+				p.getInventory().clear();
+				p.setGameMode(GameMode.SURVIVAL);
+				p.teleport(p.getWorld().getSpawnLocation());
 				p.getWorld().strikeLightningEffect(p.getLocation());
 				
 			} else {
@@ -74,7 +81,12 @@ public class Events implements Listener{
 	 */
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent event) {
-		event.setQuitMessage(ChatColor.GRAY + "<-- " + event.getPlayer().getName());
-		actualPlayers--;
+		Player p = event.getPlayer();
+		event.setQuitMessage(ChatColor.GRAY + "<-- " + p.getName());
+		
+		if(memberOfGame.containsKey(p)){
+			memberOfGame.put(p, false);
+			actualPlayers--;
+		}
 	}
 }
