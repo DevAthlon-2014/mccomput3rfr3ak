@@ -13,6 +13,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class DevathlonMccomput3rfr3ak extends JavaPlugin{
 
 	public static String prefix = ChatColor.GREEN + "[DevAhtlon-2014] " + ChatColor.RESET;
+	int countdown;
+	public boolean activeGame = false;
 //	private ProtocolManager protocolManager;
 //	
 //	public void onLoad() {
@@ -32,17 +34,38 @@ public class DevathlonMccomput3rfr3ak extends JavaPlugin{
         getLogger().info(pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!");
 	}
 	
+	public void startGame() {
+		countdown = 60;
+		new BukkitRunnable() {
+			
+			@Override
+			public void run() {
+				if(!activeGame) {
+					if(!Events.preparing) {
+						if (countdown == 0) {
+							
+						}
+					}
+				}
+				
+			}
+		};
+	}
+	
 	public void timer() {
 		new BukkitRunnable() {
 			
 			@Override
 			public void run() {
 				if (Events.preparing) {
-					if (Events.actualPlayers < Events.minPlayers) getServer().broadcastMessage(prefix + ChatColor.BLUE + "Waiting for Players")
-				}
+					if (Events.actualPlayers < Events.minPlayers) 
+						getServer().broadcastMessage(prefix + ChatColor.BLUE + "Waiting for Players");
+					else
+						Events.preparing = false;
+				} else this.cancel();
 				
 			}
-		};
+		}.runTaskTimerAsynchronously(this, 0L, 20L);
 	}
 
 }
