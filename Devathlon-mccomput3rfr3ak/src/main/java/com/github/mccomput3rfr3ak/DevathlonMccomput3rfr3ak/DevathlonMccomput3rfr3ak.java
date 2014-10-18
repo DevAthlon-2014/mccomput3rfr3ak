@@ -4,19 +4,16 @@ import org.bukkit.ChatColor;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
+//import com.comphenix.protocol.ProtocolManager;
+
 public class DevathlonMccomput3rfr3ak extends JavaPlugin{
 
 	public static String prefix = ChatColor.RED + "[DevAhtlon-2014] " + ChatColor.RESET;
-	private ProtocolManager protocolManager;
-	  
-	public void onLoad() {
-	    protocolManager = ProtocolLibrary.getProtocolManager();
-	}
 	
 	
 	@Override
 	public void onDisable() {
-		
+	
 	}
 
 	@Override
