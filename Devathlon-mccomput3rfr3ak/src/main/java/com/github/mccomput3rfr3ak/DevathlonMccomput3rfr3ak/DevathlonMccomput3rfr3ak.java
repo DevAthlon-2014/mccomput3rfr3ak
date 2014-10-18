@@ -1,7 +1,5 @@
 package com.github.mccomput3rfr3ak.DevathlonMccomput3rfr3ak;
 
-import java.lang.reflect.InvocationTargetException;
-
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -10,7 +8,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.comphenix.protocol.*;
-import com.comphenix.protocol.events.PacketContainer;
 
 public class DevathlonMccomput3rfr3ak extends JavaPlugin{
 
@@ -46,6 +43,11 @@ public class DevathlonMccomput3rfr3ak extends JavaPlugin{
 			public void run() {
 				if(!activeGame) {
 					if(!Events.preparing) {
+						if (Events.actualPlayers < 1) {
+							activeGame = false;
+							Events.preparing = true;
+							timer();
+						}
 						if (countdown == 0) {
 							getServer().broadcastMessage(prefix + ChatColor.GOLD + "M\u00F6gen die Spiele beginnen!");
 							for (Player p : getServer().getOnlinePlayers()) {
@@ -57,15 +59,13 @@ public class DevathlonMccomput3rfr3ak extends JavaPlugin{
 						if (countdown == 60 || countdown == 30 || countdown == 15 || countdown == 5){
 							getServer().broadcastMessage(prefix + "Start in " + countdown + "!");
 							for (Player p : getServer().getOnlinePlayers()) {
-								PacketContainer fakeExplosion = protocolManager.createPacket(PacketType.Play.Server.EXPLOSION);
-								fakeExplosion.getDoubles().write(0, p.getLocation().getX()).write(1, p.getLocation().getY()).write(2, p.getLocation().getZ());
-								fakeExplosion.getFloat().write(0, 3.0F);
-								try {
-								    protocolManager.sendServerPacket(p, fakeExplosion);
-								} catch (InvocationTargetException e) {
-								    throw new RuntimeException(
-								        "Cannot send packet " + fakeExplosion, e);
-								}
+								
+//								try {
+//								    protocolManager.sendServerPacket(p,new PacketContainer(P));
+//								} catch (Exception e) {
+//								    throw new RuntimeException(
+//								        "Cannot send packet ", e);
+//								}
 							}
 						}
 						countdown--;
